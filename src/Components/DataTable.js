@@ -7,9 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container, Tooltip } from '@mui/material';
+import { Button, Container, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { Link } from 'react-router-dom';
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
@@ -18,7 +19,17 @@ const DataTable = () => {
     console.log(taskList);
     return (
         <Container sx={{ marginTop: '100px' }}>
-            <TableContainer component={Paper}>
+            <Button variant="contained" sx={{ mb: 5 }}>
+                <Link to="/taskmanager"
+                    style={{
+                        color: 'white',
+                        textDecoration: 'none'
+                    }}>
+                    Add Task
+                </Link>
+            </Button>
+
+            <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
                     <TableHead>
                         <TableRow >
