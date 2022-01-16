@@ -32,7 +32,9 @@ const DataTable = () => {
                         {taskList.map((row) => (
                             <TableRow
                                 key={row.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                sx={{
+                                    '&:last-child td, &:last-child th': { border: 0 }
+                                }}
                             >
                                 <TableCell component="th" scope="row" align='center'>
                                     {row.id}
@@ -44,11 +46,14 @@ const DataTable = () => {
                                     Due Date
                                 </TableCell>
                                 <TableCell align='center'>
-                                    <Tooltip title="Edit">
+                                    <Tooltip title="Edit" sx={{ '&:hover': { transform: 'scale(1.2)' } }}>
                                         <EditIcon color="primary" />
                                     </Tooltip>
                                     <Tooltip title="Delete">
-                                        <RemoveCircleOutlineIcon color="warning" title="Delete" />
+                                        <RemoveCircleOutlineIcon color="warning" title="Delete" sx={{
+                                            ml: '10px',
+                                            '&:hover': { transform: 'scale(1.1)' }
+                                        }} />
                                     </Tooltip>
 
                                 </TableCell>
