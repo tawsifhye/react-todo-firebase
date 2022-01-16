@@ -11,16 +11,19 @@ import { Button, Container, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Link } from 'react-router-dom';
+import { useLocation } from "react-router-dom"
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
+    const { pathname } = useLocation();
+    console.log(pathname);
     // const updatedTask = [...taskList, { id: '2', title: 'seleep' }];
     // setTaskList(updatedTask);
     console.log(taskList);
     return (
         <Container sx={{ marginTop: '100px' }}>
             <Button variant="contained" sx={{ mb: 5 }}>
-                <Link to="/taskmanager"
+                <Link to="addtask"
                     style={{
                         color: 'white',
                         textDecoration: 'none'
@@ -58,12 +61,19 @@ const DataTable = () => {
                                 </TableCell>
                                 <TableCell align='center'>
                                     <Tooltip title="Edit" sx={{ '&:hover': { transform: 'scale(1.2)' } }}>
-                                        <EditIcon color="primary" />
+
+                                        <Link to="edittask"
+                                            style={{
+                                                color: 'white',
+                                                textDecoration: 'none'
+                                            }}>
+                                            <EditIcon color="primary" ></EditIcon>
+                                        </Link>
                                     </Tooltip>
                                     <Tooltip title="Delete">
-                                        <RemoveCircleOutlineIcon color="warning" title="Delete" sx={{
+                                        <RemoveCircleOutlineIcon color="warning" sx={{
                                             ml: '10px',
-                                            '&:hover': { transform: 'scale(1.1)' }
+                                            '&:hover': { transform: 'scale(1.2)' }
                                         }} />
                                     </Tooltip>
 

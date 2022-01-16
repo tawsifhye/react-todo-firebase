@@ -14,7 +14,8 @@ function App() {
           <Route path="/" element={<DataTable />
           } />
 
-          <Route path="taskmanager" element={<TaskManager />} />
+          <Route path="addtask" element={<TaskManager />} />
+          <Route path="edittask" element={<TaskManager />} />
         </Routes>
       </DataProvider>
 
