@@ -96,7 +96,7 @@ const TaskManager = () => {
                             <br />
                             {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
                         </form>
-                        <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>Show ToDo List</Button>
+                        <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>View ToDo List</Button>
                     </>
                     :
                     <>
@@ -111,7 +111,7 @@ const TaskManager = () => {
                             <button style={styles.submit} onClick={updateHandler} >Update</button>
                             <br />
                             {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
-                            <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>Show ToDo List</Button>
+                            <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>View ToDo List</Button>
                         </form>
 
 
