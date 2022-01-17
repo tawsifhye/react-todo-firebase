@@ -16,7 +16,7 @@ import { useLocation } from "react-router-dom"
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
     const { pathname } = useLocation();
-    console.log(pathname);
+    //    console.log(pathname);
     // const updatedTask = [...taskList, { id: '2', title: 'seleep' }];
     // setTaskList(updatedTask);
     console.log(taskList);
@@ -57,7 +57,7 @@ const DataTable = () => {
                                     {row.pendingTask}
                                 </TableCell>
                                 <TableCell align='center'>
-                                    Due Date
+                                    {row.dueDate}
                                 </TableCell>
                                 <TableCell align='center'>
                                     <Tooltip title="Edit" sx={{ '&:hover': { transform: 'scale(1.2)' } }}>
