@@ -15,7 +15,9 @@ function App() {
           } />
 
           <Route path="addtask" element={<TaskManager />} />
-          <Route path="edittask" element={<TaskManager />} />
+          <Route path="edittask/:taskid" element={<TaskManager />} >
+
+          </Route>
         </Routes>
       </DataProvider>
 

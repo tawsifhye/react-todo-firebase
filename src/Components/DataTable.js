@@ -30,15 +30,14 @@ const DataTable = () => {
     }
     return (
         <Container sx={{ marginTop: '100px' }}>
-            <Button variant="contained" sx={{ mb: 5 }}>
-                <Link to="addtask"
-                    style={{
-                        color: 'white',
-                        textDecoration: 'none'
-                    }}>
-                    Add Task
-                </Link>
-            </Button>
+
+            <Link to="/addtask"
+                style={{
+                    color: 'white',
+                    textDecoration: 'none'
+                }}>
+                <Button variant="contained" sx={{ mb: 5 }}>Add Task</Button>
+            </Link>
 
             <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -58,7 +57,6 @@ const DataTable = () => {
                                 sx={{
                                     '&:last-child td, &:last-child th': { border: 0 }
                                 }}
-                                checked={row.status}
                             >
                                 {/* <TableCell component="th" scope="row" align='center'>
                                     {row.id}
@@ -70,14 +68,15 @@ const DataTable = () => {
                                     {row.dueDate}
                                 </TableCell>
                                 <TableCell align='center'>
-                                    <Tooltip title="Edit" sx={{ '&:hover': { transform: 'scale(1.2)' } }}>
+                                    <Tooltip title="Edit">
 
-                                        <Link to="edittask"
+                                        <Link to={`/edittask/${row.id}`}
                                             style={{
                                                 color: 'white',
-                                                textDecoration: 'none'
+                                                textDecoration: 'none',
+
                                             }}>
-                                            <EditIcon color="primary" ></EditIcon>
+                                            <EditIcon color="primary" sx={{ '&:hover': { transform: 'scale(1.2)' } }} ></EditIcon>
                                         </Link>
                                     </Tooltip>
                                     {
@@ -112,7 +111,7 @@ const DataTable = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Container>
+        </Container >
     );
 };
 
