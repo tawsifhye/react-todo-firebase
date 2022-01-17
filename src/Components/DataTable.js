@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Container, Tooltip } from '@mui/material';
+import { Button, Container, Tooltip, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
@@ -73,7 +73,7 @@ const DataTable = () => {
                                         </Link>
                                     </Tooltip>
                                     <Tooltip title="Done">
-                                        <DoneOutlineIcon onClick={() => deleteTask(row.id)} color="success" sx={{
+                                        <DoneOutlineIcon color="success" sx={{
                                             ml: '10px',
                                             '&:hover': { transform: 'scale(1.2)' }
                                         }} />
@@ -86,7 +86,9 @@ const DataTable = () => {
                                     </Tooltip>
                                 </TableCell>
                                 <TableCell component="th" scope="row" align='center'>
-                                    Incomplete
+                                    <Typography sx={{ color: 'red' }}>
+                                        Incomplete
+                                    </Typography>
                                 </TableCell>
                             </TableRow>
                         ))}

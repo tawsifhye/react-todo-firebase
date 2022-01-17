@@ -14,7 +14,7 @@ const TaskManager = () => {
     const navigateRoute = () => {
         navigate('/');
     }
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, resetField, formState: { errors } } = useForm();
     const onSubmit = data => {
         const newTask = {
             id: taskList.length + 1,
@@ -22,6 +22,7 @@ const TaskManager = () => {
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
+        resetField("pendingTask", "dueDate")
         // navigate('/');
     }
 
