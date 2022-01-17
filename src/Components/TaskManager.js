@@ -3,25 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom"
 import { Container, Typography } from '@mui/material';
-import { height } from '@mui/system';
 import useDataProvider from '../Context/useDataProvider';
 
-const styles = {
-    input: {
-        display: 'block',
-    }
-}
 
 const TaskManager = () => {
     const [taskList, setTaskList] = useDataProvider();
     const { pathname } = useLocation();
     // console.log(pathname);
     let navigate = useNavigate();
-    const navigateRoute = () => {
-        navigate('/');
-    }
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => {
         const newTask = {
             id: taskList.length + 1,
@@ -32,7 +23,7 @@ const TaskManager = () => {
         navigate('/');
     }
 
-    // console.log(watch("example"));
+
 
     return (
         <Container

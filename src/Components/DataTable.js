@@ -11,14 +11,9 @@ import { Button, Container, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Link } from 'react-router-dom';
-import { useLocation } from "react-router-dom"
 
 const DataTable = () => {
-    const [taskList, setTaskList] = useDataProvider();
-    const { pathname } = useLocation();
-    //    console.log(pathname);
-    // const updatedTask = [...taskList, { id: '2', title: 'seleep' }];
-    // setTaskList(updatedTask);
+    const [taskList] = useDataProvider();
     console.log(taskList);
     return (
         <Container sx={{ marginTop: '100px' }}>
