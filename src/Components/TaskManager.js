@@ -44,8 +44,8 @@ const TaskManager = () => {
         }
         const updatedTaskList = [];
         updatedTaskList.push(updatedTask);
-        console.log(updatedTaskList)
-        // const newTaskList = tas
+        const newTaskList = taskList.map(task => updatedTaskList.find(o => o.id === task.id) || task);
+        setTaskList(newTaskList);
     }
 
     return (
