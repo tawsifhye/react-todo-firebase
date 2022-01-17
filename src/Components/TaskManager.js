@@ -19,6 +19,7 @@ const TaskManager = () => {
         const newTask = {
             id: Math.random() * 100,
             ...data,
+            status: false,
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);

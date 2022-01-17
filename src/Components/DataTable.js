@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,11 +15,18 @@ import { Link } from 'react-router-dom';
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
+    const [isUpdated, setIsUpdated] = useState(false);
     console.log(taskList);
 
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
+    }
+    const markDone = (id) => {
+        const completeTask = taskList.find((task) => task.id === id);
+        console.log(completeTask);
+        completeTask.status = true;
+        setIsUpdated(true);
     }
     return (
         <Container sx={{ marginTop: '100px' }}>
@@ -51,6 +58,7 @@ const DataTable = () => {
                                 sx={{
                                     '&:last-child td, &:last-child th': { border: 0 }
                                 }}
+                                checked={row.status}
                             >
                                 {/* <TableCell component="th" scope="row" align='center'>
                                     {row.id}
@@ -72,12 +80,16 @@ const DataTable = () => {
                                             <EditIcon color="primary" ></EditIcon>
                                         </Link>
                                     </Tooltip>
-                                    <Tooltip title="Done">
-                                        <DoneOutlineIcon color="success" sx={{
-                                            ml: '10px',
-                                            '&:hover': { transform: 'scale(1.2)' }
-                                        }} />
-                                    </Tooltip>
+                                    {
+                                        !row.status &&
+                                        <Tooltip title="Done">
+                                            <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
+                                                ml: '10px',
+                                                '&:hover': { transform: 'scale(1.2)' }
+                                            }} />
+                                        </Tooltip>
+                                    }
+
                                     <Tooltip title="Delete">
                                         <RemoveCircleOutlineIcon onClick={() => deleteTask(row.id)} color="warning" sx={{
                                             ml: '10px',
@@ -86,9 +98,14 @@ const DataTable = () => {
                                     </Tooltip>
                                 </TableCell>
                                 <TableCell component="th" scope="row" align='center'>
-                                    <Typography sx={{ color: 'red' }}>
-                                        Incomplete
-                                    </Typography>
+
+                                    {
+                                        row.status ?
+                                            <Typography sx={{ color: 'green' }}>Complete</Typography>
+                                            :
+                                            <Typography sx={{ color: 'red' }}>Incomplete</Typography>
+                                    }
+
                                 </TableCell>
                             </TableRow>
                         ))}
