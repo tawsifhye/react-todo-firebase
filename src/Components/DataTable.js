@@ -16,15 +16,12 @@ import { Link } from 'react-router-dom';
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
     const [isUpdated, setIsUpdated] = useState(false);
-    console.log(taskList);
-
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
     }
     const markDone = (id) => {
         const completeTask = taskList.find((task) => task.id === id);
-        console.log(completeTask);
         completeTask.status = true;
         setIsUpdated(true);
     }
