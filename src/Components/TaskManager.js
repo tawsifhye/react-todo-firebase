@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom"
-import { Container, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import useDataProvider from '../Context/useDataProvider';
 
 
@@ -11,7 +11,9 @@ const TaskManager = () => {
     const { pathname } = useLocation();
     // console.log(pathname);
     let navigate = useNavigate();
-
+    const navigateRoute = () => {
+        navigate('/');
+    }
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => {
         const newTask = {
@@ -20,7 +22,7 @@ const TaskManager = () => {
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
-        navigate('/');
+        // navigate('/');
     }
 
 
@@ -52,6 +54,7 @@ const TaskManager = () => {
                         <br />
                         {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
                     </form>
+                    <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>Show ToDo List</Button>
                 </>
 
 

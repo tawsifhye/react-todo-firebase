@@ -10,11 +10,17 @@ import Paper from '@mui/material/Paper';
 import { Button, Container, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import { Link } from 'react-router-dom';
 
 const DataTable = () => {
-    const [taskList] = useDataProvider();
+    const [taskList, setTaskList] = useDataProvider();
     console.log(taskList);
+
+    const deleteTask = id => {
+        const newTaskList = taskList.filter((task) => task.id !== id)
+        setTaskList(newTaskList);
+    }
     return (
         <Container sx={{ marginTop: '100px' }}>
             <Button variant="contained" sx={{ mb: 5 }}>
@@ -31,10 +37,11 @@ const DataTable = () => {
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
                     <TableHead>
                         <TableRow >
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>SL</TableCell>
+                            {/* <TableCell align="center" sx={{ fontWeight: 'bold' }}>SL</TableCell> */}
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -45,9 +52,9 @@ const DataTable = () => {
                                     '&:last-child td, &:last-child th': { border: 0 }
                                 }}
                             >
-                                <TableCell component="th" scope="row" align='center'>
+                                {/* <TableCell component="th" scope="row" align='center'>
                                     {row.id}
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align='center'>
                                     {row.pendingTask}
                                 </TableCell>
@@ -65,13 +72,21 @@ const DataTable = () => {
                                             <EditIcon color="primary" ></EditIcon>
                                         </Link>
                                     </Tooltip>
-                                    <Tooltip title="Delete">
-                                        <RemoveCircleOutlineIcon color="warning" sx={{
+                                    <Tooltip title="Done">
+                                        <DoneOutlineIcon onClick={() => deleteTask(row.id)} color="success" sx={{
                                             ml: '10px',
                                             '&:hover': { transform: 'scale(1.2)' }
                                         }} />
                                     </Tooltip>
-
+                                    <Tooltip title="Delete">
+                                        <RemoveCircleOutlineIcon onClick={() => deleteTask(row.id)} color="warning" sx={{
+                                            ml: '10px',
+                                            '&:hover': { transform: 'scale(1.2)' }
+                                        }} />
+                                    </Tooltip>
+                                </TableCell>
+                                <TableCell component="th" scope="row" align='center'>
+                                    Incomplete
                                 </TableCell>
                             </TableRow>
                         ))}
