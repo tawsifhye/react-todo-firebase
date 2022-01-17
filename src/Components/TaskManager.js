@@ -17,12 +17,12 @@ const TaskManager = () => {
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
     const onSubmit = data => {
         const newTask = {
-            id: taskList.length + 1,
+            id: Math.random() * 100,
             ...data,
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
-        resetField("pendingTask", "dueDate")
+        resetField("pendingTask", 'dueDate')
         // navigate('/');
     }
 
