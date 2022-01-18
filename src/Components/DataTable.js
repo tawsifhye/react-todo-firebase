@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,16 +13,10 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
-    console.log(taskList);
-
-    // var given = moment({ dueDate }, "YYYY-MM-DD");
-    // var current = moment().startOf('day');
-    // //Difference in number of days
-    // console.log(moment.duration(given.diff(current)).asDays())
 
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)

@@ -5,8 +5,6 @@ import { useLocation } from "react-router-dom"
 import { Alert, Button, Container, Typography } from '@mui/material';
 import useDataProvider from '../Context/useDataProvider';
 import moment from 'moment';
-import { FlashlightOffRounded } from '@mui/icons-material';
-
 
 const styles = {
     form: {
@@ -41,28 +39,8 @@ const TaskManager = () => {
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
     const today = new Date();
-    // const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     const currentDate = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
-    // var a = moment([2007, 0, 29]);
-    // var b = moment([2007, 0, 28]);
-    // a.diff(b, 'days')
-
-    // var dateofvisit = moment('{visit}', 'DD-MM-YYYY');
-    // var today = moment();
-    // today.diff(dateofvisit, 'days');
-
-
-    // const given = moment({ dueDate }, "YYYY-MM-DD");
-    // var current = moment().startOf('day');
-    // //Difference in number of days
-    // console.log(moment.duration(given.diff(current)).asDays())
-
-    // var interestStartDate = moment()
-    //     var interestEndDate = moment(dueDate)
-    //     console.log('interestStartDate: ', interestStartDate)
-    //     console.log('interestEndDate: ', interestEndDate)
-    //     console.log(moment(interestEndDate).diff(moment(interestStartDate), 'days', true))
 
     const navigate = useNavigate();
     const navigateRoute = () => {
