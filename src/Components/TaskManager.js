@@ -59,7 +59,7 @@ const TaskManager = () => {
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
-        resetField("pendingTask", 'dueDate')
+        resetField("pendingTask", 'dueDate');
         setIsAdded('true');
 
     }

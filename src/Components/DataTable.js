@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,23 +16,22 @@ import { Link } from 'react-router-dom';
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
-    const [taskStatus, setTaskStatus] = useState(false);
+    console.log(taskList);
 
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
     }
-    const markDone = (id, type) => {
+    const markDone = (id) => {
 
-        const completeTask = taskList.find((task) => task.id === id);
-        if (type === 'done') {
-            completeTask.status = true;
-            setTaskStatus(true);
-        }
-        else {
-            completeTask.status = false;
-            setTaskStatus(false);
-        }
+        const statusUpdatedTaslList = taskList.map((task) => {
+            if (task.id === id) {
+                task.status = !task.status
+            }
+            return task;
+
+        })
+        setTaskList(statusUpdatedTaslList);
 
     }
     return (
@@ -110,7 +109,7 @@ const DataTable = () => {
                                             :
                                             <Typography sx={{ color: 'red' }}>Incomplete
                                                 <Tooltip title="Mark Done">
-                                                    <DoneOutlineIcon onClick={() => markDone(row.id, 'done')} color="success" sx={{
+                                                    <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
                                                         ml: '10px',
                                                         '&:hover': { transform: 'scale(1.2)' }
                                                     }} />
