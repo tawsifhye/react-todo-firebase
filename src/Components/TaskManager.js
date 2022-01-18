@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom"
 import { Button, Container, Typography } from '@mui/material';
 import useDataProvider from '../Context/useDataProvider';
-import { fontWeight, style } from '@mui/system';
 
 const styles = {
     form: {
@@ -25,6 +24,7 @@ const styles = {
     },
 
 }
+
 
 const TaskManager = () => {
     const [taskList, setTaskList] = useDataProvider();
@@ -104,9 +104,9 @@ const TaskManager = () => {
                             Edit Task
                         </Typography>
                         <form form onSubmit={handleSubmit(onSubmit)}>
-                            <input defaultValue={selectedTask.pendingTask} {...register("pendingTask", { required: true })} onBlur={getUpdatedTask} style={styles.form} />
+                            <input defaultValue={selectedTask?.pendingTask} {...register("pendingTask", { required: true })} onBlur={getUpdatedTask} style={styles.form} />
                             <br />
-                            <input defaultValue={selectedTask.dueDate} type='date' {...register("dueDate", { required: true })} onBlur={getDate} style={styles.form} />
+                            <input defaultValue={selectedTask?.dueDate} type='date' {...register("dueDate", { required: true })} onBlur={getDate} style={styles.form} />
                             <br />
                             <button style={styles.submit} onClick={updateHandler} >Update</button>
                             <br />

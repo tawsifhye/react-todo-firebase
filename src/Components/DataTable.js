@@ -11,6 +11,7 @@ import { Button, Container, Tooltip, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
 
 const DataTable = () => {
@@ -20,10 +21,18 @@ const DataTable = () => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
     }
-    const markDone = (id) => {
+    const markDone = (id, type) => {
+
         const completeTask = taskList.find((task) => task.id === id);
-        completeTask.status = true;
-        setIsUpdated(true);
+        if (type === 'done') {
+            completeTask.status = true;
+            setIsUpdated(true);
+        }
+        else {
+            completeTask.status = false;
+            setIsUpdated(false);
+        }
+
     }
     return (
         <Container sx={{ marginTop: '100px' }}>
@@ -65,26 +74,20 @@ const DataTable = () => {
                                     {row.dueDate}
                                 </TableCell>
                                 <TableCell align='center'>
-                                    <Tooltip title="Edit">
+                                    {!row.status &&
+                                        <Tooltip title="Edit">
 
-                                        <Link to={`/edittask/${row.id}`}
-                                            style={{
-                                                color: 'white',
-                                                textDecoration: 'none',
+                                            <Link to={`/edittask/${row.id}`}
+                                                style={{
+                                                    color: 'white',
+                                                    textDecoration: 'none',
 
-                                            }}>
-                                            <EditIcon color="primary" sx={{ '&:hover': { transform: 'scale(1.2)' } }} ></EditIcon>
-                                        </Link>
-                                    </Tooltip>
-                                    {
-                                        !row.status &&
-                                        <Tooltip title="Done">
-                                            <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
-                                                ml: '10px',
-                                                '&:hover': { transform: 'scale(1.2)' }
-                                            }} />
+                                                }}>
+                                                <EditIcon color="primary" sx={{ '&:hover': { transform: 'scale(1.2)' } }} ></EditIcon>
+                                            </Link>
                                         </Tooltip>
                                     }
+
 
                                     <Tooltip title="Delete">
                                         <RemoveCircleOutlineIcon onClick={() => deleteTask(row.id)} color="warning" sx={{
@@ -97,9 +100,26 @@ const DataTable = () => {
 
                                     {
                                         row.status ?
-                                            <Typography sx={{ color: 'green' }}>Complete</Typography>
+
+                                            <Typography sx={{ color: 'green' }}>Complete
+
+                                                <Tooltip title="Mark Undone">
+                                                    <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
+                                                        ml: '10px',
+                                                        '&:hover': { transform: 'scale(1.2)' }
+                                                    }} />
+                                                </Tooltip>
+                                            </Typography>
                                             :
-                                            <Typography sx={{ color: 'red' }}>Incomplete</Typography>
+                                            <Typography sx={{ color: 'red' }}>Incomplete
+                                                <Tooltip title="Mark Done">
+                                                    <DoneOutlineIcon onClick={() => markDone(row.id, 'done')} color="success" sx={{
+                                                        ml: '10px',
+                                                        '&:hover': { transform: 'scale(1.2)' }
+                                                    }} />
+                                                </Tooltip>
+
+                                            </Typography>
                                     }
 
                                 </TableCell>
