@@ -104,7 +104,7 @@ const TaskManager = () => {
                             <input placeholder='Task' {...register("pendingTask", { required: true })} style={styles.form} />
                             <br />
                             <label style={styles.label}>Add Due Date</label>
-                            <input type='date' {...register("dueDate", { required: true })} style={styles.form} />
+                            <input type='date' defaultValue={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
                             <br />
 
                             <input type="submit" style={styles.submit} />
