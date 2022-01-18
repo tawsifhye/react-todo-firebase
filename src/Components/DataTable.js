@@ -13,10 +13,16 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
     console.log(taskList);
+
+    // var given = moment({ dueDate }, "YYYY-MM-DD");
+    // var current = moment().startOf('day');
+    // //Difference in number of days
+    // console.log(moment.duration(given.diff(current)).asDays())
 
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
@@ -53,6 +59,7 @@ const DataTable = () => {
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Remaining Days</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -118,6 +125,9 @@ const DataTable = () => {
                                             </Typography>
                                     }
 
+                                </TableCell>
+                                <TableCell component="th" scope="row" align='center'>
+                                    {row.remainingDays}
                                 </TableCell>
                             </TableRow>
                         ))}

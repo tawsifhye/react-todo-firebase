@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom"
 import { Alert, Button, Container, Typography } from '@mui/material';
 import useDataProvider from '../Context/useDataProvider';
+import moment from 'moment';
+import { FlashlightOffRounded } from '@mui/icons-material';
+
 
 const styles = {
     form: {
@@ -33,33 +36,57 @@ const TaskManager = () => {
     const [taskList, setTaskList] = useDataProvider();
     const [updatedTaskName, setUpdatedTaskName] = useState('');
     const [updatedDate, setUpdatedDate] = useState('');
-    const [isAdded, setIsAdded] = useState('');
+    const [isAdded, setIsAdded] = useState(false);
     const { pathname } = useLocation();
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
     const today = new Date();
     // const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     const currentDate = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-    console.log(currentDate)
+
+    // var a = moment([2007, 0, 29]);
+    // var b = moment([2007, 0, 28]);
+    // a.diff(b, 'days')
+
+    // var dateofvisit = moment('{visit}', 'DD-MM-YYYY');
+    // var today = moment();
+    // today.diff(dateofvisit, 'days');
+
+
+    // const given = moment({ dueDate }, "YYYY-MM-DD");
+    // var current = moment().startOf('day');
+    // //Difference in number of days
+    // console.log(moment.duration(given.diff(current)).asDays())
+
+    // var interestStartDate = moment()
+    //     var interestEndDate = moment(dueDate)
+    //     console.log('interestStartDate: ', interestStartDate)
+    //     console.log('interestEndDate: ', interestEndDate)
+    //     console.log(moment(interestEndDate).diff(moment(interestStartDate), 'days', true))
+
     let navigate = useNavigate();
     const navigateRoute = () => {
         navigate('/');
     }
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
     const onSubmit = data => {
-        if (data.dueDate < currentDate) {
-            setIsAdded('false');
-            return;
-        }
+        const dueDate = data.dueDate;
+        const given = moment(dueDate, "YYYY-MM-DD");
+        var current = moment().startOf('day');
+        //Difference in number of days
+        let remainingDays = moment.duration(given.diff(current)).asDays();
+
+
         const newTask = {
             id: (Math.random() * 100).toString(),
             ...data,
             status: false,
-            currentDate
+            currentDate,
+            remainingDays
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
-        resetField("pendingTask", 'dueDate');
+        resetField("pendingTask", "dueDate");
         setIsAdded('true');
 
     }
@@ -104,7 +131,7 @@ const TaskManager = () => {
                             <input placeholder='Task' {...register("pendingTask", { required: true })} style={styles.form} />
                             <br />
                             <label style={styles.label}>Add Due Date</label>
-                            <input type='date' defaultValue={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
+                            <input type='date' defaultValue={currentDate} min={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
                             <br />
 
                             <input type="submit" style={styles.submit} />
@@ -130,12 +157,8 @@ const TaskManager = () => {
                         </form>
                     </>
             }
-            {isAdded === 'true' &&
-                <Alert sx={{ mt: 2 }} severity="success" onClose={() => setIsAdded('')}>Task Added <strong>check ToDo Table</strong>. </Alert>
-
-            }
-            {isAdded === 'false' &&
-                <Alert sx={{ mt: 2 }} severity="error" onClose={() => setIsAdded('')}>Due Date<strong>can not be smaller than current date</strong>.</Alert>
+            {isAdded &&
+                <Alert sx={{ mt: 2 }} severity="success" onClose={() => setIsAdded(false)}>Task Added <strong>check ToDo Table</strong>. </Alert>
 
             }
         </ Container>
