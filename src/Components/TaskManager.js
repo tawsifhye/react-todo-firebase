@@ -29,7 +29,6 @@ const styles = {
 
 }
 
-
 const TaskManager = () => {
     const [taskList, setTaskList] = useDataProvider();
     const [updatedTaskName, setUpdatedTaskName] = useState('');

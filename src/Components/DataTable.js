@@ -15,8 +15,7 @@ import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
 
 const DataTable = () => {
-    const [taskList,
-        setTaskList] = useDataProvider();
+    const [taskList, setTaskList] = useDataProvider();
     const [taskStatus, setTaskStatus] = useState(false);
 
     const deleteTask = id => {
@@ -51,7 +50,6 @@ const DataTable = () => {
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
                     <TableHead>
                         <TableRow >
-                            {/* <TableCell align="center" sx={{ fontWeight: 'bold' }}>SL</TableCell> */}
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
@@ -66,9 +64,6 @@ const DataTable = () => {
                                     '&:last-child td, &:last-child th': { border: 0 }
                                 }}
                             >
-                                {/* <TableCell component="th" scope="row" align='center'>
-                                    {row.id}
-                                </TableCell> */}
                                 <TableCell align='center'>
                                     {row.pendingTask}
                                 </TableCell>
