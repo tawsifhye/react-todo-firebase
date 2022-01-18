@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom"
-import { Button, Container, Typography } from '@mui/material';
+import { Alert, Button, Container, Typography } from '@mui/material';
 import useDataProvider from '../Context/useDataProvider';
 
 const styles = {
@@ -34,12 +34,14 @@ const TaskManager = () => {
     const [taskList, setTaskList] = useDataProvider();
     const [updatedTaskName, setUpdatedTaskName] = useState('');
     const [updatedDate, setUpdatedDate] = useState('');
+    const [isAdded, setIsAdded] = useState('');
     const { pathname } = useLocation();
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
     const today = new Date();
-    const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-
+    // const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const currentDate = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+    console.log(currentDate)
     let navigate = useNavigate();
     const navigateRoute = () => {
         navigate('/');
@@ -47,7 +49,7 @@ const TaskManager = () => {
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
     const onSubmit = data => {
         if (data.dueDate < currentDate) {
-            console.log(`Due date can not be smaller than today's date`);
+            setIsAdded('false');
             return;
         }
         const newTask = {
@@ -59,6 +61,7 @@ const TaskManager = () => {
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
         resetField("pendingTask", 'dueDate')
+        setIsAdded('true');
 
     }
     const getUpdatedTask = (e) => {
@@ -126,16 +129,16 @@ const TaskManager = () => {
                             {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
                             <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>View ToDo List</Button>
                         </form>
-
-
-
                     </>
+            }
+            {isAdded === 'true' &&
+                <Alert sx={{ mt: 2 }} severity="success" onClose={() => setIsAdded('')}>Task Added <strong>check ToDo Table</strong>. </Alert>
 
             }
+            {isAdded === 'false' &&
+                <Alert sx={{ mt: 2 }} severity="error" onClose={() => setIsAdded('')}>Due Date<strong>can not be smaller than current date</strong>.</Alert>
 
-
-
-
+            }
         </ Container>
     );
 };
