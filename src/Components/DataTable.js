@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Container, Tooltip, Typography } from '@mui/material';
+import { Button, Checkbox, Container, Tooltip, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
@@ -18,6 +18,16 @@ import { Link } from 'react-router-dom';
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
 
+
+    const checkBoxHandler = (e, index) => {
+        let arr = [];
+        // if (e.target.checked) {
+        //     const selectedTask = taskList.find((task) => task.id === e.target.value);
+        //     arr.push(selectedTask);
+        //     console.log(arr);
+        // }
+        console.log(index);
+    }
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
@@ -57,7 +67,7 @@ const DataTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {taskList.map((row) => (
+                        {taskList.map((row, index) => (
                             <TableRow
                                 key={row.id}
                                 sx={{
@@ -65,7 +75,7 @@ const DataTable = () => {
                                 }}
                             >
                                 <TableCell align='center'>
-                                    {row.pendingTask}
+                                    <Checkbox onChange={() => checkBoxHandler(index)} value={row.id} />
                                 </TableCell>
                                 <TableCell align='center'>
                                     {row.dueDate}
