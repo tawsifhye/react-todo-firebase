@@ -64,25 +64,28 @@ const TaskManager = () => {
     //     console.log('interestEndDate: ', interestEndDate)
     //     console.log(moment(interestEndDate).diff(moment(interestStartDate), 'days', true))
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const navigateRoute = () => {
         navigate('/');
     }
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
-    const onSubmit = data => {
-        const dueDate = data.dueDate;
+
+    const handleRemainingDays = (dueDate) => {
         const given = moment(dueDate, "YYYY-MM-DD");
         var current = moment().startOf('day');
         //Difference in number of days
         let remainingDays = moment.duration(given.diff(current)).asDays();
+        return remainingDays;
+    }
 
+    const onSubmit = data => {
 
         const newTask = {
             id: (Math.random() * 100).toString(),
             ...data,
             status: false,
             currentDate,
-            remainingDays
+            remainingDays: handleRemainingDays(data.dueDate)
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
@@ -100,7 +103,8 @@ const TaskManager = () => {
         const updatedTask = {
             id: selectedTask?.id,
             pendingTask: updatedTaskName || selectedTask?.pendingTask,
-            dueDate: updatedDate || selectedTask?.dueDate
+            dueDate: updatedDate || selectedTask?.dueDate,
+            remainingDays: handleRemainingDays(updatedDate) || selectedTask.remainingDays
         }
         const updatedTaskList = [];
         updatedTaskList.push(updatedTask);
