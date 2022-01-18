@@ -15,25 +15,12 @@ import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
 
 const DataTable = () => {
-    const [taskList, setTaskList] = useDataProvider();
-    const [isUpdated, setIsUpdated] = useState(false);
-    const deleteTask = id => {
-        const newTaskList = taskList.filter((task) => task.id !== id)
-        setTaskList(newTaskList);
-    }
-    const markDone = (id, type) => {
+    const [taskList,
+        setTaskList,
+        setIsUpdated,
+        deleteTask,
+        markDone] = useDataProvider();
 
-        const completeTask = taskList.find((task) => task.id === id);
-        if (type === 'done') {
-            completeTask.status = true;
-            setIsUpdated(true);
-        }
-        else {
-            completeTask.status = false;
-            setIsUpdated(false);
-        }
-
-    }
     return (
         <Container sx={{ marginTop: '100px' }}>
 
