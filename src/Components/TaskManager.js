@@ -22,6 +22,10 @@ const styles = {
         transition: '.3s',
         cursor: 'pointer',
     },
+    label: {
+        display: 'block',
+        marginTop: '20px',
+    }
 
 }
 
@@ -33,6 +37,8 @@ const TaskManager = () => {
     const { pathname } = useLocation();
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
+    const today = new Date();
+    const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
     let navigate = useNavigate();
     const navigateRoute = () => {
@@ -40,10 +46,15 @@ const TaskManager = () => {
     }
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
     const onSubmit = data => {
+        if (data.dueDate < currentDate) {
+            console.log(`Due date can not be smaller than today's date`);
+            return;
+        }
         const newTask = {
             id: (Math.random() * 100).toString(),
             ...data,
             status: false,
+            currentDate
         }
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
@@ -87,8 +98,10 @@ const TaskManager = () => {
                             Add Task
                         </Typography>
                         <form form onSubmit={handleSubmit(onSubmit)}>
+                            <label style={styles.label}>Task Name</label>
                             <input placeholder='Task' {...register("pendingTask", { required: true })} style={styles.form} />
                             <br />
+                            <label style={styles.label}>Add Due Date</label>
                             <input type='date' {...register("dueDate", { required: true })} style={styles.form} />
                             <br />
 

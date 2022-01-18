@@ -3,6 +3,7 @@ import { useState } from "react";
 const useData = () => {
     const [taskList, setTaskList] = useState([]);
     const [isUpdated, setIsUpdated] = useState(false);
+
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
         setTaskList(newTaskList);
@@ -25,7 +26,7 @@ const useData = () => {
         setTaskList,
         setIsUpdated,
         deleteTask,
-        markDone
+        markDone,
     ];
 }
 

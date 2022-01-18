@@ -20,7 +20,7 @@ const DataTable = () => {
         setIsUpdated,
         deleteTask,
         markDone] = useDataProvider();
-
+    console.log(taskList)
     return (
         <Container sx={{ marginTop: '100px' }}>
 
