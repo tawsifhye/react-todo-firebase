@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 const DataTable = () => {
 
     const [taskList, setTaskList] = useDataProvider();
+    console.log(taskList);
     const arr = [];
 
     const checkBoxHandler = (e) => {
