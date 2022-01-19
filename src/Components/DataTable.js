@@ -18,21 +18,18 @@ import { Link } from 'react-router-dom';
 const DataTable = () => {
 
     const [taskList, setTaskList] = useDataProvider();
-    let arr = [];
+    const arr = [];
 
     const checkBoxHandler = (e) => {
         if (e.target.checked) {
-
             const find = taskList.find(task => task.id === e.target.value)
-            arr.push(find)
-            console.log(arr);
+            arr.push(find);
+
         }
         if (!e.target.checked) {
             const unChecked = arr.find(a => a.id === e.target.value)
             arr.splice(arr.indexOf(unChecked), 1)
-            console.log('Spliced Array', arr);
         }
-
     }
     const deleteMultipleTask = () => {
         const filteredArray = taskList.filter((task) => {
