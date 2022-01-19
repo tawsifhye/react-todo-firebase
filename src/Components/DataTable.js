@@ -9,7 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, Checkbox, Container, Tooltip, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
@@ -40,10 +39,7 @@ const DataTable = () => {
 
         setTaskList(filteredArray);
     }
-    const deleteTask = id => {
-        const newTaskList = taskList.filter((task) => task.id !== id)
-        setTaskList(newTaskList);
-    }
+
     const markDone = (id) => {
 
         const statusUpdatedTasklList = taskList.map((task) => {
