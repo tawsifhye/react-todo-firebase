@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,16 +17,33 @@ import { Link } from 'react-router-dom';
 
 const DataTable = () => {
     const [taskList, setTaskList] = useDataProvider();
+    const [isDeleteDisabled, setIsDeleteDisabled] = useState(true)
+    let arr = [];
+    const checkBoxHandler = (e) => {
+        if (e.target.checked) {
 
+            const find = taskList.find(task => task.id === e.target.value)
+            arr.push(find)
+            console.log(arr);
+        }
+        if (!e.target.checked) {
+            const unChecked = arr.find(a => a.id === e.target.value)
+            arr.splice(arr.indexOf(unChecked), 1)
+            console.log('Spliced Array', arr);
+        }
+        if (arr.length > 0) {
+            setIsDeleteDisabled(false);
+        } else {
+            setIsDeleteDisabled(true);
+        }
+    }
+    const deleteMultipleTask = () => {
+        const filteredArray = taskList.filter((task) => {
+            return arr.indexOf(task) < 0;
 
-    const checkBoxHandler = (e, index) => {
-        let arr = [];
-        // if (e.target.checked) {
-        //     const selectedTask = taskList.find((task) => task.id === e.target.value);
-        //     arr.push(selectedTask);
-        //     console.log(arr);
-        // }
-        console.log(index);
+        });
+
+        setTaskList(filteredArray);
     }
     const deleteTask = id => {
         const newTaskList = taskList.filter((task) => task.id !== id)
@@ -34,14 +51,14 @@ const DataTable = () => {
     }
     const markDone = (id) => {
 
-        const statusUpdatedTaslList = taskList.map((task) => {
+        const statusUpdatedTasklList = taskList.map((task) => {
             if (task.id === id) {
                 task.status = !task.status
             }
             return task;
 
         })
-        setTaskList(statusUpdatedTaslList);
+        setTaskList(statusUpdatedTasklList);
 
     }
     return (
@@ -50,15 +67,18 @@ const DataTable = () => {
             <Link to="/addtask"
                 style={{
                     color: 'white',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    display: 'block'
                 }}>
-                <Button variant="contained" sx={{ mb: 5 }}>Add Task</Button>
+                <Button variant="contained" sx={{ mb: 2 }}>Add Task</Button>
             </Link>
+            <Button variant="contained" color="warning" disabled={isDeleteDisabled} sx={{ mb: 2 }} onClick={deleteMultipleTask}>Delete</Button>
 
             <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
                     <TableHead>
                         <TableRow >
+                            <TableCell align="center" sx={{ fontWeight: 'bold' }}></TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
@@ -75,7 +95,10 @@ const DataTable = () => {
                                 }}
                             >
                                 <TableCell align='center'>
-                                    <Checkbox onChange={() => checkBoxHandler(index)} value={row.id} />
+                                    <Checkbox onChange={checkBoxHandler} value={row.id} />
+                                </TableCell>
+                                <TableCell align='center'>
+                                    {row.pendingTask}
                                 </TableCell>
                                 <TableCell align='center'>
                                     {row.dueDate}
