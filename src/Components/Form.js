@@ -56,7 +56,7 @@ const Form = () => {
         return remainingDays;
     }
 
-    const onSubmit = data => {
+    const handleAddData = data => {
 
         const newTask = {
             id: (Math.random() * 100).toString(),
@@ -71,18 +71,13 @@ const Form = () => {
         setIsAdded('true');
 
     }
-    const getUpdatedTask = (e) => {
-        setUpdatedTaskName(e.target.value);
-    }
-    const getDate = (e) => {
-        setUpdatedDate(e.target.value)
-    }
-    const updateHandler = () => {
+
+    const handleUpdate = (data) => {
+        console.log(data);
         const updatedTask = {
             id: selectedTask?.id,
-            pendingTask: updatedTaskName || selectedTask?.pendingTask,
-            dueDate: updatedDate || selectedTask?.dueDate,
-            remainingDays: handleRemainingDays(updatedDate) || selectedTask.remainingDays
+            ...data,
+            remainingDays: handleRemainingDays(data.dueDate) || selectedTask.remainingDays
         }
         const updatedTaskList = [];
         updatedTaskList.push(updatedTask);
@@ -108,28 +103,19 @@ const Form = () => {
                 }
 
             </Typography>
-            <form form onSubmit={handleSubmit(onSubmit)}>
+            <form form onSubmit={!taskid ? handleSubmit(handleAddData) : handleSubmit(handleUpdate)}>
                 <label style={styles.label}>Task Name</label>
-                {!taskid ?
-                    <input placeholder='Task' {...register("pendingTask", { required: true })} style={styles.form} />
-                    :
-                    <input defaultValue={selectedTask?.pendingTask} onBlur={getUpdatedTask} style={styles.form} />
-                }
+
+                <input placeholder={!taskid ? 'Task' : ''} defaultValue={taskid && selectedTask?.pendingTask}
+                    {...register("pendingTask", { required: true })} style={styles.form} />
+
 
                 <label style={styles.label}>Add Due Date</label>
-                {
-                    !taskid ?
-                        <input type='date' defaultValue={currentDate} min={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
-                        :
-                        <input defaultValue={selectedTask?.dueDate} min={currentDate} type='date' onBlur={getDate} style={styles.form} />
-                }
 
-                {
-                    !taskid ?
-                        <input type="submit" style={styles.submit} />
-                        :
-                        <button style={styles.submit} onClick={updateHandler} >Update</button>
-                }
+                <input type='date' defaultValue={!taskid ? currentDate : selectedTask?.dueDate} min={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
+
+                <input type="submit" style={styles.submit} />
+
 
                 {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
                 <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>View ToDo List</Button>
