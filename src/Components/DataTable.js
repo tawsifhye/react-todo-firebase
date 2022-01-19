@@ -78,7 +78,7 @@ const DataTable = () => {
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}></TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Edit Task</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
                             <TableCell align="center" sx={{ fontWeight: 'bold' }}>Remaining Days</TableCell>
                         </TableRow>
@@ -115,13 +115,13 @@ const DataTable = () => {
                                         </Tooltip>
                                     }
 
-
+                                    {/* 
                                     <Tooltip title="Delete">
                                         <RemoveCircleOutlineIcon onClick={() => deleteTask(row.id)} color="warning" sx={{
                                             ml: '10px',
                                             '&:hover': { transform: 'scale(1.2)' }
                                         }} />
-                                    </Tooltip>
+                                    </Tooltip> */}
                                 </TableCell>
                                 <TableCell component="th" scope="row" align='center'>
 

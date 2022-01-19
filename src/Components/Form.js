@@ -1,15 +1,17 @@
 import { Alert, Button, Container, Typography } from '@mui/material';
+import { display } from '@mui/system';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useDataProvider from '../Context/useDataProvider';
 
 const styles = {
     form: {
         marginTop: '10px',
         padding: '15px',
-        fontSize: '15px'
+        fontSize: '15px',
+        display: 'block'
     },
     submit: {
         marginTop: '10px',
@@ -21,6 +23,7 @@ const styles = {
         color: 'white',
         transition: '.3s',
         cursor: 'pointer',
+        display: 'block'
     },
     label: {
         display: 'block',
@@ -29,18 +32,15 @@ const styles = {
 
 }
 
-
 const Form = () => {
     const [taskList, setTaskList] = useDataProvider();
     const [updatedTaskName, setUpdatedTaskName] = useState('');
     const [updatedDate, setUpdatedDate] = useState('');
     const [isAdded, setIsAdded] = useState(false);
-    const { pathname } = useLocation();
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
     const today = new Date();
     const currentDate = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-
 
     const navigate = useNavigate();
     const navigateRoute = () => {
@@ -104,42 +104,39 @@ const Form = () => {
 
             <Typography variant='h3'>
                 {
-                    pathname === '/addtask' ? 'Add Task' : 'Edit Task'
+                    !taskid ? 'Add Task' : 'Edit Task'
                 }
 
             </Typography>
             <form form onSubmit={handleSubmit(onSubmit)}>
                 <label style={styles.label}>Task Name</label>
-                {pathname === '/addtask' ?
+                {!taskid ?
                     <input placeholder='Task' {...register("pendingTask", { required: true })} style={styles.form} />
                     :
-                    <input defaultValue={selectedTask?.pendingTask} {...register("pendingTask", { required: true })} onBlur={getUpdatedTask} style={styles.form} />
-                }
-                <br />
-                <label style={styles.label}>Add Due Date</label>
-                {
-                    pathname === '/addtask' ?
-                        <input type='date' defaultValue={currentDate} min={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
-                        :
-                        <input defaultValue={selectedTask?.dueDate} type='date' {...register("dueDate", { required: true })} onBlur={getDate} style={styles.form} />
+                    <input defaultValue={selectedTask?.pendingTask} onBlur={getUpdatedTask} style={styles.form} />
                 }
 
-                <br />
+                <label style={styles.label}>Add Due Date</label>
                 {
-                    pathname === '/addtask' ?
+                    !taskid ?
+                        <input type='date' defaultValue={currentDate} min={currentDate} {...register("dueDate", { required: true })} style={styles.form} />
+                        :
+                        <input defaultValue={selectedTask?.dueDate} min={currentDate} type='date' onBlur={getDate} style={styles.form} />
+                }
+
+                {
+                    !taskid ?
                         <input type="submit" style={styles.submit} />
                         :
                         <button style={styles.submit} onClick={updateHandler} >Update</button>
                 }
 
-                <br />
                 {(errors.pendingTask || errors.dueDate) && <span>This field is required</span>}
                 <Button sx={{ marginTop: '20px' }} variant='contained' onClick={navigateRoute}>View ToDo List</Button>
             </form>
 
             {isAdded &&
                 <Alert sx={{ mt: 2 }} severity="success" onClose={() => setIsAdded(false)}>Task Added <strong>check ToDo Table</strong>. </Alert>
-
             }
         </ Container>
     );
