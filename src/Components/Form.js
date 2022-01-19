@@ -101,7 +101,6 @@ const Form = () => {
                 {
                     !taskid ? 'Add Task' : 'Edit Task'
                 }
-
             </Typography>
             <form form onSubmit={!taskid ? handleSubmit(handleAddData) : handleSubmit(handleUpdate)}>
                 <label style={styles.label}>Task Name</label>
