@@ -16,9 +16,10 @@ import { Link } from 'react-router-dom';
 
 
 const DataTable = () => {
+
     const [taskList, setTaskList] = useDataProvider();
-    const [isDeleteDisabled, setIsDeleteDisabled] = useState(true)
     let arr = [];
+
     const checkBoxHandler = (e) => {
         if (e.target.checked) {
 
@@ -31,11 +32,7 @@ const DataTable = () => {
             arr.splice(arr.indexOf(unChecked), 1)
             console.log('Spliced Array', arr);
         }
-        if (arr.length > 0) {
-            setIsDeleteDisabled(false);
-        } else {
-            setIsDeleteDisabled(true);
-        }
+
     }
     const deleteMultipleTask = () => {
         const filteredArray = taskList.filter((task) => {
@@ -72,7 +69,9 @@ const DataTable = () => {
                 }}>
                 <Button variant="contained" sx={{ mb: 2 }}>Add Task</Button>
             </Link>
-            <Button variant="contained" color="warning" disabled={isDeleteDisabled} sx={{ mb: 2 }} onClick={deleteMultipleTask}>Delete</Button>
+
+            <Button variant="contained" color="warning" sx={{ mb: 2 }} onClick={deleteMultipleTask}>Delete</Button>
+
 
             <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
                 <Table sx={{ minWidth: 450 }} aria-label="simple table">
