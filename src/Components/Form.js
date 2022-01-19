@@ -1,5 +1,4 @@
 import { Alert, Button, Container, Typography } from '@mui/material';
-import { display } from '@mui/system';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,8 +33,6 @@ const styles = {
 
 const Form = () => {
     const [taskList, setTaskList] = useDataProvider();
-    const [updatedTaskName, setUpdatedTaskName] = useState('');
-    const [updatedDate, setUpdatedDate] = useState('');
     const [isAdded, setIsAdded] = useState(false);
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
@@ -68,8 +65,7 @@ const Form = () => {
         const updatedTaskList = [...taskList, newTask];
         setTaskList(updatedTaskList);
         resetField("pendingTask", "dueDate");
-        setIsAdded('true');
-
+        setIsAdded(true);
     }
 
     const handleUpdate = (data) => {
@@ -85,6 +81,8 @@ const Form = () => {
         setTaskList(newTaskList);
         navigate('/');
     }
+
+
 
     return (
         <Container
