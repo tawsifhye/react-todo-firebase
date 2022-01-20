@@ -91,7 +91,7 @@ const DataTable = () => {
 
 
 
-            <Container sx={{ marginTop: '100px' }}>
+            <Container>
                 {
                     user.email &&
                     <>
