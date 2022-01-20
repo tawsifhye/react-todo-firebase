@@ -18,25 +18,34 @@ import initializeFirebase from '../Firebase/firebase.init';
 
 const DataTable = () => {
 
+    const [taskList, setTaskList, authReturn] = useDataProvider();
+    const { user, setUser, handleGoogleSignIn, handleSignOut } = authReturn;
+
     useEffect(() => {
-        const dbRef = ref(getDatabase(initializeFirebase()));
-        get(child(dbRef, `todolist/`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                const todos = snapshot.val();
-                const todoList = [];
-                for (let id in todos) {
-                    todoList.push(todos[id])
+        if (user) {
+            const dbRef = ref(getDatabase(initializeFirebase()));
+            get(child(dbRef, `todolist/${user.uid}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const todos = snapshot.val();
+                    const todoList = [];
+                    for (let id in todos) {
+                        todoList.push(todos[id])
+                    }
+                    setTaskList(todoList);
+                } else {
+                    // alert("No data available");
                 }
-                setTaskList(todoList);
-            } else {
-                alert("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+        else {
+
+        }
+
     }, [])
 
-    const [taskList, setTaskList] = useDataProvider();
+
     const arr = [];
 
     const checkBoxHandler = (e) => {
@@ -73,17 +82,22 @@ const DataTable = () => {
     }
     return (
         <Container sx={{ marginTop: '100px' }}>
+            {
+                user &&
+                <Typography variant='h6'>Logged in as:{user.email}</Typography>
+            }
 
             <Link to="/addtask"
                 style={{
                     color: 'white',
                     textDecoration: 'none',
-                    display: 'block'
+                    display: 'block',
                 }}>
-                <Button variant="contained" sx={{ mb: 2 }}>Add Task</Button>
+                <Button variant="contained" sx={{ mb: 2, mt: 2 }}>Add Task</Button>
             </Link>
 
-            <Button variant="contained" color="warning" sx={{ mb: 2 }} onClick={deleteMultipleTask}>Delete</Button>
+            <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button>
+            <Button variant="contained" color="success" sx={{ mb: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
 
 
             <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
@@ -130,13 +144,6 @@ const DataTable = () => {
                                         </Tooltip>
                                     }
 
-                                    {/* 
-                                    <Tooltip title="Delete">
-                                        <RemoveCircleOutlineIcon onClick={() => deleteTask(row.id)} color="warning" sx={{
-                                            ml: '10px',
-                                            '&:hover': { transform: 'scale(1.2)' }
-                                        }} />
-                                    </Tooltip> */}
                                 </TableCell>
                                 <TableCell component="th" scope="row" align='center'>
 

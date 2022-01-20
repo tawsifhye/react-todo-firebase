@@ -1,12 +1,10 @@
 import { Alert, Button, Container, Typography } from '@mui/material';
-import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import useDataProvider from '../Context/useDataProvider';
-import firebaseConfig from '../Firebase/firebase.config';
 import initializeFirebase from '../Firebase/firebase.init';
 
 
@@ -37,13 +35,13 @@ const styles = {
 }
 
 const Form = () => {
-    const [taskList, setTaskList] = useDataProvider();
+    const [taskList, setTaskList, authReturn] = useDataProvider();
+    const { user, handleGoogleSignIn, handleSignOut } = authReturn;
     const [isAdded, setIsAdded] = useState(false);
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
     const today = new Date();
     const currentDate = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-
     const navigate = useNavigate();
     const navigateRoute = () => {
         navigate('/');
@@ -73,12 +71,14 @@ const Form = () => {
 
     const handleAddData = data => {
         const db = getDatabase(initializeFirebase());
-        push(ref(db, 'todolist/'), {
+        push(ref(db, 'todolist/' + user.uid), {
             taskId: (Math.random() * 100).toString(),
             ...data,
             status: false,
             currentDate,
-            remainingDays: handleRemainingDays(data.dueDate)
+            remainingDays: handleRemainingDays(data.dueDate),
+            email: user.email,
+            uid: user.uid
         });
 
         // const newTask = {
