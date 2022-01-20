@@ -81,106 +81,125 @@ const DataTable = () => {
 
     }
     return (
-        <Container sx={{ marginTop: '100px' }}>
-            {
-                user &&
-                <Typography variant='h6'>Logged in as:{user.email}</Typography>
-            }
-
-            <Link to="/addtask"
-                style={{
-                    color: 'white',
-                    textDecoration: 'none',
-                    display: 'block',
-                }}>
-                <Button variant="contained" sx={{ mb: 2, mt: 2 }}>Add Task</Button>
-            </Link>
-
-            {/* <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button> */}
-            <Button variant="contained" color="success" sx={{ mb: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
+        <>
+            <Container sx={{ textAlign: 'center', padding: '20px' }}>
+                <Typography variant='h3'>
+                    React ToDo App
+                </Typography>
+                <Button variant="contained" color="success" sx={{ mb: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
+            </Container>
 
 
-            <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
-                <Table sx={{ minWidth: 450 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow >
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}></TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Edit Task</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Remaining Days</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {taskList.map((row, index) => (
-                            <TableRow
-                                key={row.taskId}
-                                sx={{
-                                    '&:last-child td, &:last-child th': { border: 0 }
-                                }}
-                            >
-                                <TableCell align='center'>
-                                    <Checkbox onChange={checkBoxHandler} value={row.id} />
-                                </TableCell>
-                                <TableCell align='center'>
-                                    {row.pendingTask}
-                                </TableCell>
-                                <TableCell align='center'>
-                                    {row.dueDate}
-                                </TableCell>
-                                <TableCell align='center'>
-                                    {!row.status &&
-                                        <Tooltip title="Edit">
 
-                                            <Link to={`/edittask/${row.id}`}
-                                                style={{
-                                                    color: 'white',
-                                                    textDecoration: 'none',
+            <Container sx={{ marginTop: '100px' }}>
+                {
+                    user.email &&
+                    <>
+                        <Typography variant='h6'>Logged in as:{user.email}</Typography>
+                        <Link to="/addtask"
+                            style={{
+                                color: 'white',
+                                textDecoration: 'none',
+                                display: 'block',
+                            }}>
+                            <Button variant="contained" sx={{ mb: 2, mt: 2 }}>Add Task</Button>
+                        </Link>
+                    </>
 
-                                                }}>
-                                                <EditIcon color="primary" sx={{ '&:hover': { transform: 'scale(1.2)' } }} ></EditIcon>
-                                            </Link>
-                                        </Tooltip>
-                                    }
+                }
 
-                                </TableCell>
-                                <TableCell component="th" scope="row" align='center'>
 
-                                    {
-                                        row.status ?
 
-                                            <Typography sx={{ color: 'green' }}>Complete
+                {/* <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button> */}
 
-                                                <Tooltip title="Mark Undone">
-                                                    {/* <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
+                {
+                    user.email &&
+                    <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
+                        <Table sx={{ minWidth: 450 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow >
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}></TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}>Pending Task</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}>Due Date</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}>Edit Task</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 'bold' }}>Remaining Days</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {taskList.map((row, index) => (
+                                    <TableRow
+                                        key={row.taskId}
+                                        sx={{
+                                            '&:last-child td, &:last-child th': { border: 0 }
+                                        }}
+                                    >
+                                        <TableCell align='center'>
+                                            <Checkbox onChange={checkBoxHandler} value={row.id} />
+                                        </TableCell>
+                                        <TableCell align='center'>
+                                            {row.pendingTask}
+                                        </TableCell>
+                                        <TableCell align='center'>
+                                            {row.dueDate}
+                                        </TableCell>
+                                        <TableCell align='center'>
+                                            {!row.status &&
+                                                <Tooltip title="Edit">
+
+                                                    <Link to={`/edittask/${row.id}`}
+                                                        style={{
+                                                            color: 'white',
+                                                            textDecoration: 'none',
+
+                                                        }}>
+                                                        <EditIcon color="primary" sx={{ '&:hover': { transform: 'scale(1.2)' } }} ></EditIcon>
+                                                    </Link>
+                                                </Tooltip>
+                                            }
+
+                                        </TableCell>
+                                        <TableCell component="th" scope="row" align='center'>
+
+                                            {
+                                                row.status ?
+
+                                                    <Typography sx={{ color: 'green' }}>Complete
+
+                                                        <Tooltip title="Mark Undone">
+                                                            {/* <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
                                                         ml: '10px',
                                                         '&:hover': { transform: 'scale(1.2)' }
                                                     }} /> */}
-                                                </Tooltip>
-                                            </Typography>
-                                            :
-                                            <Typography sx={{ color: 'red' }}>Incomplete
-                                                <Tooltip title="Mark Done">
-                                                    <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
-                                                        ml: '10px',
-                                                        '&:hover': { transform: 'scale(1.2)' }
-                                                    }} />
-                                                </Tooltip>
+                                                        </Tooltip>
+                                                    </Typography>
+                                                    :
+                                                    <Typography sx={{ color: 'red' }}>Incomplete
+                                                        {/* <Tooltip title="Mark Done">
+                                                        <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
+                                                            ml: '10px',
+                                                            '&:hover': { transform: 'scale(1.2)' }
+                                                        }} />
+                                                    </Tooltip> */}
 
-                                            </Typography>
-                                    }
+                                                    </Typography>
+                                            }
 
-                                </TableCell>
-                                <TableCell component="th" scope="row" align='center'>
-                                    {row.remainingDays}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container >
+                                        </TableCell>
+                                        <TableCell component="th" scope="row" align='center'>
+                                            {row.remainingDays}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                }
+
+            </Container >
+
+        </>
+
     );
 };
 
