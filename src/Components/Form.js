@@ -69,13 +69,6 @@ const Form = () => {
     //         } 
     // }
 
-    function writeUserData(data) {
-        const db = getDatabase(initializeApp(firebaseConfig));
-        set(ref(db, 'users/'), {
-            username: 'tawsif',
-        });
-    }
-
 
 
     const handleAddData = data => {

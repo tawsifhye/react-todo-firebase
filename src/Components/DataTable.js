@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,12 +12,31 @@ import EditIcon from '@mui/icons-material/Edit';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
+import { child, get, getDatabase, ref } from '@firebase/database';
+import initializeFirebase from '../Firebase/firebase.init';
 
 
 const DataTable = () => {
 
+    useEffect(() => {
+        const dbRef = ref(getDatabase(initializeFirebase()));
+        get(child(dbRef, `todolist/`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const todos = snapshot.val();
+                const todoList = [];
+                for (let id in todos) {
+                    todoList.push(todos[id])
+                }
+                setTaskList(todoList);
+            } else {
+                alert("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }, [])
+
     const [taskList, setTaskList] = useDataProvider();
-    console.log(taskList);
     const arr = [];
 
     const checkBoxHandler = (e) => {
@@ -82,7 +101,7 @@ const DataTable = () => {
                     <TableBody>
                         {taskList.map((row, index) => (
                             <TableRow
-                                key={row.id}
+                                key={row.taskId}
                                 sx={{
                                     '&:last-child td, &:last-child th': { border: 0 }
                                 }}
