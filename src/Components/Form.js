@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Typography } from '@mui/material';
-import { getDatabase, ref, set, push } from 'firebase/database';
+import { getDatabase, ref, set, push, child, update } from 'firebase/database';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -35,8 +35,7 @@ const styles = {
 }
 
 const Form = () => {
-    const [taskList, setTaskList, authReturn] = useDataProvider();
-    const { user, handleGoogleSignIn, handleSignOut } = authReturn;
+    const [taskList, setTaskList, user, handleGoogleSignIn, handleSignOut] = useDataProvider();
     const [isAdded, setIsAdded] = useState(false);
     const { taskid } = useParams();
     const selectedTask = taskList.find((task) => task.id === taskid);
@@ -47,7 +46,7 @@ const Form = () => {
         navigate('/');
     }
     const { register, handleSubmit, resetField, formState: { errors } } = useForm();
-
+    const db = getDatabase(initializeFirebase());
     const handleRemainingDays = (dueDate) => {
         const given = moment(dueDate, "YYYY-MM-DD");
         var current = moment().startOf('day');
@@ -56,23 +55,9 @@ const Form = () => {
         return remainingDays;
     }
 
-    //      const handleAddData = data => {
-
-    //         const newTask = {
-    //             id: (Math.random() * 100).toString(),
-    //             ...data,
-    //             status: false,
-    //             currentDate,
-    //             remainingDays: handleRemainingDays(data.dueDate)
-    //         } 
-    // }
-
-
-
     const handleAddData = data => {
-        const db = getDatabase(initializeFirebase());
+
         push(ref(db, 'todolist/' + user.uid), {
-            taskId: (Math.random() * 100).toString(),
             ...data,
             status: false,
             currentDate,
@@ -80,30 +65,23 @@ const Form = () => {
             email: user.email,
             uid: user.uid
         });
-
-        // const newTask = {
-        //     name: 'todo'
-        // }
-        // db.push(newTask)
-        // const updatedTaskList = [...taskList, newTask];
-        // setTaskList(updatedTaskList);
-
-
         resetField("pendingTask", "dueDate");
         setIsAdded(true);
     }
 
     const handleUpdate = (data) => {
-        console.log(data);
         const updatedTask = {
-            id: selectedTask?.id,
-            ...data,
+            pendingTask: data.pendingTask || selectedTask.pendingTask,
+            dueDate: data.dueDate || selectedTask.dueDate,
             remainingDays: handleRemainingDays(data.dueDate) || selectedTask.remainingDays
         }
-        const updatedTaskList = [];
-        updatedTaskList.push(updatedTask);
-        const newTaskList = taskList.map(task => updatedTaskList.find(o => o.id === task.id) || task);
-        setTaskList(newTaskList);
+
+        // Write the new post's data simultaneously in the posts list and the user's post list.
+        const updates = {};
+        updates[`/todolist/${user.uid}/${taskid}/pendingTask`] = updatedTask.pendingTask;
+        updates[`/todolist/${user.uid}/${taskid}/dueDate`] = updatedTask.dueDate;
+        updates[`/todolist/${user.uid}/${taskid}/remainingDays`] = updatedTask.remainingDays;
+        return update(ref(db), updates);
         navigate('/');
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDataProvider from '../Context/useDataProvider'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,24 +12,24 @@ import EditIcon from '@mui/icons-material/Edit';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
-import { child, get, getDatabase, ref } from '@firebase/database';
+import { child, get, getDatabase, ref, update } from '@firebase/database';
 import initializeFirebase from '../Firebase/firebase.init';
 
 
 const DataTable = () => {
-
-    const [taskList, setTaskList, authReturn] = useDataProvider();
-    const { user, setUser, handleGoogleSignIn, handleSignOut } = authReturn;
-
+    const db = getDatabase(initializeFirebase());
+    const [taskList, setTaskList, user, setUser, handleGoogleSignIn, handleSignOut] = useDataProvider();
+    const [updatedStatus, setUpdatedStatus] = useState(false);
+    console.log(taskList);
     useEffect(() => {
         if (user) {
-            const dbRef = ref(getDatabase(initializeFirebase()));
+            const dbRef = ref(db);
             get(child(dbRef, `todolist/${user.uid}`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     const todos = snapshot.val();
                     const todoList = [];
                     for (let id in todos) {
-                        todoList.push(todos[id])
+                        todoList.push({ id, ...todos[id] })
                     }
                     setTaskList(todoList);
                 } else {
@@ -43,7 +43,7 @@ const DataTable = () => {
             setUser({});
         }
 
-    }, [user])
+    }, [user, updatedStatus])
 
 
     const arr = [];
@@ -68,17 +68,24 @@ const DataTable = () => {
         setTaskList(filteredArray);
     }
 
-    const markDone = (id) => {
-
-        const statusUpdatedTasklList = taskList.map((task) => {
-            if (task.id === id) {
-                task.status = !task.status
+    const markDone = (taskid) => {
+        if (updatedStatus) {
+            setUpdatedStatus(false);
+        }
+        const dbRef = ref(db);
+        get(child(dbRef, `/todolist/${user.uid}/${taskid}/status`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const status = snapshot.val();
+                const updates = {};
+                updates[`/todolist/${user.uid}/${taskid}/status`] = !status;
+                setUpdatedStatus(true);
+                return update(ref(db), updates,);
+            } else {
+                // alert("No data available");
             }
-            return task;
-
-        })
-        setTaskList(statusUpdatedTasklList);
-
+        }).catch((error) => {
+            console.error(error);
+        });
     }
     return (
         <>
@@ -127,9 +134,9 @@ const DataTable = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {taskList.map((row, index) => (
+                                {taskList.map((row) => (
                                     <TableRow
-                                        key={row.taskId}
+                                        key={row.id}
                                         sx={{
                                             '&:last-child td, &:last-child th': { border: 0 }
                                         }}
@@ -167,20 +174,20 @@ const DataTable = () => {
                                                     <Typography sx={{ color: 'green' }}>Complete
 
                                                         <Tooltip title="Mark Undone">
-                                                            {/* <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
-                                                        ml: '10px',
-                                                        '&:hover': { transform: 'scale(1.2)' }
-                                                    }} /> */}
+                                                            <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
+                                                                ml: '10px',
+                                                                '&:hover': { transform: 'scale(1.2)' }
+                                                            }} />
                                                         </Tooltip>
                                                     </Typography>
                                                     :
                                                     <Typography sx={{ color: 'red' }}>Incomplete
-                                                        {/* <Tooltip title="Mark Done">
-                                                        <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
-                                                            ml: '10px',
-                                                            '&:hover': { transform: 'scale(1.2)' }
-                                                        }} />
-                                                    </Tooltip> */}
+                                                        <Tooltip title="Mark Done">
+                                                            <DoneOutlineIcon onClick={() => markDone(row.id)} color="success" sx={{
+                                                                ml: '10px',
+                                                                '&:hover': { transform: 'scale(1.2)' }
+                                                            }} />
+                                                        </Tooltip>
 
                                                     </Typography>
                                             }

@@ -54,18 +54,13 @@ const useData = () => {
     }, []);
 
 
-
-    const authReturn = {
+    return [
+        taskList,
+        setTaskList,
         user,
         setUser,
         handleGoogleSignIn,
         handleSignOut
-    }
-
-    return [
-        taskList,
-        setTaskList,
-        authReturn
 
     ];
 }
