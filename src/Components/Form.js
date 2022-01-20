@@ -1,9 +1,14 @@
 import { Alert, Button, Container, Typography } from '@mui/material';
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, push } from 'firebase/database';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import useDataProvider from '../Context/useDataProvider';
+import firebaseConfig from '../Firebase/firebase.config';
+import initializeFirebase from '../Firebase/firebase.init';
+
 
 const styles = {
     form: {
@@ -53,17 +58,44 @@ const Form = () => {
         return remainingDays;
     }
 
-    const handleAddData = data => {
+    //      const handleAddData = data => {
 
-        const newTask = {
-            id: (Math.random() * 100).toString(),
+    //         const newTask = {
+    //             id: (Math.random() * 100).toString(),
+    //             ...data,
+    //             status: false,
+    //             currentDate,
+    //             remainingDays: handleRemainingDays(data.dueDate)
+    //         } 
+    // }
+
+    function writeUserData(data) {
+        const db = getDatabase(initializeApp(firebaseConfig));
+        set(ref(db, 'users/'), {
+            username: 'tawsif',
+        });
+    }
+
+
+
+    const handleAddData = data => {
+        const db = getDatabase(initializeFirebase());
+        push(ref(db, 'todolist/'), {
+            taskId: (Math.random() * 100).toString(),
             ...data,
             status: false,
             currentDate,
             remainingDays: handleRemainingDays(data.dueDate)
-        }
-        const updatedTaskList = [...taskList, newTask];
-        setTaskList(updatedTaskList);
+        });
+
+        // const newTask = {
+        //     name: 'todo'
+        // }
+        // db.push(newTask)
+        // const updatedTaskList = [...taskList, newTask];
+        // setTaskList(updatedTaskList);
+
+
         resetField("pendingTask", "dueDate");
         setIsAdded(true);
     }
