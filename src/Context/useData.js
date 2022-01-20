@@ -37,6 +37,7 @@ const useData = () => {
     const handleSignOut = () => {
         signOut(auth).then(() => {
             // Sign-out successful.
+            setUser({});
         }).catch((error) => {
             // An error happened.
         });

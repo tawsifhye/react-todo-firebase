@@ -40,10 +40,10 @@ const DataTable = () => {
             });
         }
         else {
-
+            setUser({});
         }
 
-    }, [])
+    }, [user])
 
 
     const arr = [];
@@ -96,7 +96,7 @@ const DataTable = () => {
                 <Button variant="contained" sx={{ mb: 2, mt: 2 }}>Add Task</Button>
             </Link>
 
-            <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button>
+            {/* <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button> */}
             <Button variant="contained" color="success" sx={{ mb: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
 
 
@@ -153,10 +153,10 @@ const DataTable = () => {
                                             <Typography sx={{ color: 'green' }}>Complete
 
                                                 <Tooltip title="Mark Undone">
-                                                    <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
+                                                    {/* <RemoveDoneIcon onClick={() => markDone(row.id)} color="warning" sx={{
                                                         ml: '10px',
                                                         '&:hover': { transform: 'scale(1.2)' }
-                                                    }} />
+                                                    }} /> */}
                                                 </Tooltip>
                                             </Typography>
                                             :
