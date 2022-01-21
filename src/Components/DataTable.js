@@ -18,12 +18,12 @@ import initializeFirebase from '../Firebase/firebase.init';
 
 const DataTable = () => {
     const db = getDatabase(initializeFirebase());
+    const dbRef = ref(db);
     const [taskList, setTaskList, user, setUser, handleGoogleSignIn, handleSignOut] = useDataProvider();
     const [updatedStatus, setUpdatedStatus] = useState(false);
     console.log(taskList);
     useEffect(() => {
         if (user) {
-            const dbRef = ref(db);
             get(child(dbRef, `todolist/${user.uid}`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     const todos = snapshot.val();
@@ -58,21 +58,36 @@ const DataTable = () => {
             const unChecked = arr.find(a => a.id === e.target.value)
             arr.splice(arr.indexOf(unChecked), 1)
         }
+        console.log(arr);
     }
     const deleteMultipleTask = () => {
-        const filteredArray = taskList.filter((task) => {
-            return arr.indexOf(task) < 0;
 
+        arr.forEach(element => {
+            get(child(dbRef, `/todolist/${user.uid}/`)).then((snapshot) => {
+                setUpdatedStatus(false);
+                if (snapshot.exists()) {
+                    // const task = snapshot.val();
+                    console.log(snapshot.val());
+                    const deletes = {};
+                    deletes[`/todolist/${user.uid}/${element.id}/`] = null;
+                    setUpdatedStatus(true);
+                    return update(ref(db), deletes);
+
+
+                } else {
+                    // alert("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
         });
-
-        setTaskList(filteredArray);
     }
 
     const markDone = (taskid) => {
         if (updatedStatus) {
             setUpdatedStatus(false);
         }
-        const dbRef = ref(db);
+
         get(child(dbRef, `/todolist/${user.uid}/${taskid}/status`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const status = snapshot.val();
@@ -93,7 +108,7 @@ const DataTable = () => {
                 <Typography variant='h3'>
                     React ToDo App
                 </Typography>
-                <Button variant="contained" color="success" sx={{ mb: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
+                <Button variant="contained" color="success" sx={{ mt: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
             </Container>
 
 
@@ -109,19 +124,20 @@ const DataTable = () => {
                                 textDecoration: 'none',
                                 display: 'block',
                             }}>
-                            <Button variant="contained" sx={{ mb: 2, mt: 2 }}>Add Task</Button>
+                            <Button variant="contained" sx={{ mt: 2 }}>Add Task</Button>
                         </Link>
+                        <Button variant="contained" color="warning" sx={{ mt: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button>
                     </>
 
                 }
 
 
 
-                {/* <Button variant="contained" color="warning" sx={{ mb: 2, display: 'block' }} onClick={deleteMultipleTask}>Delete</Button> */}
+
 
                 {
                     user.email &&
-                    <TableContainer sx={{ boxShadow: 3 }} component={Paper} >
+                    <TableContainer sx={{ boxShadow: 3, mt: 3 }} component={Paper} >
                         <Table sx={{ minWidth: 450 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow >
