@@ -34,6 +34,7 @@ const DataTable = () => {
                     setTaskList(todoList);
                 } else {
                     // alert("No data available");
+                    setTaskList([]);
                 }
             }).catch((error) => {
                 console.error(error);
@@ -48,6 +49,7 @@ const DataTable = () => {
 
     const arr = [];
 
+
     const checkBoxHandler = (e) => {
         if (e.target.checked) {
             const find = taskList.find(task => task.id === e.target.value)
@@ -61,18 +63,16 @@ const DataTable = () => {
         console.log(arr);
     }
     const deleteMultipleTask = () => {
-
         arr.forEach(element => {
             get(child(dbRef, `/todolist/${user.uid}/`)).then((snapshot) => {
                 setUpdatedStatus(false);
                 if (snapshot.exists()) {
                     // const task = snapshot.val();
-                    console.log(snapshot.val());
+                    // console.log(snapshot.val());
                     const deletes = {};
                     deletes[`/todolist/${user.uid}/${element.id}/`] = null;
                     setUpdatedStatus(true);
                     return update(ref(db), deletes);
-
 
                 } else {
                     // alert("No data available");
@@ -130,8 +130,6 @@ const DataTable = () => {
                     </>
 
                 }
-
-
 
 
 
