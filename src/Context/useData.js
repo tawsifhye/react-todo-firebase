@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import initializeFirebase from "../Firebase/firebase.init";
-import { GoogleAuthProvider, getAuth, signInWithPopup, onAuthStateChanged, signOut, } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, } from "firebase/auth";
 initializeFirebase();
 
 const GoogleProvider = new GoogleAuthProvider();
@@ -8,6 +8,11 @@ const GoogleProvider = new GoogleAuthProvider();
 const useData = () => {
     const [taskList, setTaskList] = useState([]);
     const [user, setUser] = useState({});
+    // const [isLoading, setIsLoading] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [isLogin, setIsLogin] = useState(false);
     const auth = getAuth();
 
     const handleGoogleSignIn = () => {
@@ -33,6 +38,58 @@ const useData = () => {
                 // ...
             });
     };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+
+    };
+
+    const handleRegistration = (e) => {
+        e.preventDefault();
+        if (password.length < 6) {
+            setError("Password should be at least 6 characters");
+            return;
+        }
+        isLogin ? processLogin(email, password) : registerNewUser(email, password);
+    };
+
+    const processLogin = (email, password) => {
+        return signInWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                const user = result.user;
+                setUser(user);
+                setError("");
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                // window.location.reload();
+            });
+    };
+
+    const registerNewUser = (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                window.location.reload();
+            });
+    };
+
+
+    const toggleLogin = (e) => {
+        setIsLogin(e.target.checked);
+    };
+
 
     const handleSignOut = () => {
         signOut(auth).then(() => {
@@ -60,7 +117,13 @@ const useData = () => {
         user,
         setUser,
         handleGoogleSignIn,
-        handleSignOut
+        handleSignOut,
+        handleEmailChange,
+        handlePasswordChange,
+        handleRegistration,
+        toggleLogin,
+        isLogin,
+        error
 
     ];
 }

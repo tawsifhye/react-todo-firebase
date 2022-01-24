@@ -14,6 +14,7 @@ import RemoveDoneIcon from '@mui/icons-material/RemoveDone';
 import { Link } from 'react-router-dom';
 import { child, get, getDatabase, ref, update } from '@firebase/database';
 import initializeFirebase from '../Firebase/firebase.init';
+import Login from './Login';
 
 
 const DataTable = () => {
@@ -108,9 +109,10 @@ const DataTable = () => {
                 <Typography variant='h3'>
                     React ToDo App
                 </Typography>
+                {!user.email && <Login></Login>}
+                {/* <Login></Login> */}
                 <Button variant="contained" color="success" sx={{ mt: 2 }} onClick={!user.email ? handleGoogleSignIn : handleSignOut}>{!user.email ? 'Sign In with Google' : 'Sign Out'}</Button>
             </Container>
-
 
 
             <Container>
